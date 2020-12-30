@@ -1,12 +1,12 @@
 import {Minefield} from './minefield.js';
 
 function check(e) {
-    let cell = field.check(e.clientX, e.clientY);
+    let cell = field.check(e.offsetX, e.offsetY);
     draw(cell);
 }
 
 function draw(cell) {
-    console.log(cell);
+    console.log(field.ascii());
 }
 
 let canvas = document.querySelector('#minefield');

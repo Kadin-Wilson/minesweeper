@@ -19,8 +19,8 @@ class Minefield {
 
         function generateField() {
             let field = [];
-            for (let x = 0; x < width; x++)
-                for (let y = 0; y < height; y++)
+            for (let y = 0; y < height; y++)
+                for (let x = 0; x < width; x++)
                     field.push(new Cell(x * size, y * size));
 
             return field;
@@ -39,11 +39,42 @@ class Minefield {
     // return the containing cell of a set of (x,y) coordinates
     getCell(x, y) {
         let sz = this.size;
-        let cellx = x - (x % sz);
-        let celly = y - (y % sz);
-        let cellIndex = ((cellx / sz) * this.width) + (celly / sz);
+        let cellX = x - (x % sz);
+        let cellY = y - (y % sz);
+        let cellIndex = ((cellY / sz) * this.width) + (cellX / sz);
 
         return this.field[cellIndex];
+    }
+
+    // return a count of the number of adjacent bombs
+    adjacentCount(cell) {
+        let count = 0;
+        let x = cell.x;
+        let y = cell.y;
+        let sz = this.size;
+
+        if (x > 0) { // check left 
+            if (this.getCell(x - sz, y).bomb)
+                ++count;
+            if (y > 0 && this.getCell(x - sz, y - sz).bomb)
+                ++count;
+            if (y < (this.height - 1) * sz && this.getCell(x - sz, y + sz).bomb)
+                ++count;
+        }
+        if (x < (this.width - 1) * sz) { // check right
+            if (this.getCell(x + sz, y).bomb)
+                ++count;
+            if (y > 0 && this.getCell(x + sz, y - sz).bomb)
+                ++count;
+            if (y < (this.height - 1) * sz && this.getCell(x + sz, y + sz).bomb)
+                ++count;
+        }
+        if (y > 0 && this.getCell(x, y - sz).bomb) // check last top
+            ++count;
+        if (y < (this.height - 1) * sz && this.getCell(x, y + sz).bomb) // check last bottom
+            ++count;
+
+        return count;
     }
 
     // finds the cell, marks it as checked,
@@ -51,6 +82,11 @@ class Minefield {
     // returns the now modified cell
     check(x, y) {
         let cell = this.getCell(x, y);
+        if (!cell.bomb) {
+            let count = this.adjacentCount(cell);
+            cell.adjacent = count;
+            cell.checked = true;
+        }
 
         return cell;
     }
@@ -59,7 +95,10 @@ class Minefield {
     ascii() {
         let str = '';
         for (let i = 0; i < this.field.length; i++) {
-            str += this.field[i].bomb ? '*' : '.';
+            if (this.field[i].checked) 
+                str += this.field[i].adjacent;
+            else
+                str += this.field[i].bomb ? '*' : '.';
             if ((i + 1) % this.width == 0) // end of row
                 str += "\n";
         }
