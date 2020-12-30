@@ -83,7 +83,7 @@ class Minefield {
     // recursivley checks cells if adjacent is zero
     check(x, y) {
         let cell = this.getCell(x, y);
-        if (!cell.checked) {
+        if (!cell.checked && !cell.bomb) {
             let count = this.adjacentCount(cell);
             cell.adjacent = count;
             cell.checked = true;
@@ -126,7 +126,7 @@ class Minefield {
     ascii() {
         let str = '';
         for (let i = 0; i < this.field.length; i++) {
-            if (this.field[i].checked && !this.field[i].bomb) 
+            if (this.field[i].checked) 
                 str += this.field[i].adjacent;
             else
                 str += this.field[i].bomb ? '*' : '.';
@@ -138,7 +138,7 @@ class Minefield {
     }
 
     [Symbol.iterator]() {
-        return this.field[Symbol.iterator];
+        return this.field[Symbol.iterator]();
     }
 }
 
