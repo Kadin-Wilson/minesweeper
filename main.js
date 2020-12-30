@@ -11,5 +11,6 @@ function draw(cell) {
 
 let canvas = document.querySelector('#minefield');
 let size = canvas.clientWidth / 8;
-let field = new Minefield(size, 8, 8, 10);
+let field = new Minefield(8, 8, 10, size);
+setup(size);
 canvas.addEventListener('click', check);

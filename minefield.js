@@ -9,7 +9,7 @@ class Cell {
 }
 
 class Minefield {
-    constructor(size, width, height, bombs) {
+    constructor(width, height, bombs, size = 1) {
         this.size = size;
         this.width = width;
         this.height = height;
