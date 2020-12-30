@@ -80,22 +80,53 @@ class Minefield {
     // finds the cell, marks it as checked,
     // marks number of sorounding mines,
     // returns the now modified cell
+    // recursivley checks cells if adjacent is zero
     check(x, y) {
         let cell = this.getCell(x, y);
-        if (!cell.bomb) {
+        if (!cell.checked) {
             let count = this.adjacentCount(cell);
             cell.adjacent = count;
             cell.checked = true;
+
+            if(cell.adjacent == 0) {
+                this.checkAround(cell);
+            }
         }
 
         return cell;
+    }
+
+    // check all cells around the given cell
+    checkAround(cell) {
+        let x = cell.x;
+        let y = cell.y;
+        let sz = this.size;
+
+        if (x > 0) { // check left 
+            this.check(x - sz, y);
+            if (y > 0)
+                this.check(x - sz, y - sz);
+            if (y < (this.height - 1) * sz)
+                this.check(x - sz, y + sz);
+        }
+        if (x < (this.width - 1) * sz) { // check right
+            this.check(x + sz, y);
+            if (y > 0)
+                this.check(x + sz, y - sz);
+            if (y < (this.height - 1) * sz)
+                this.check(x + sz, y + sz);
+        }
+        if (y > 0)
+            this.check(x, y - sz);
+        if (y < (this.height - 1) * sz)
+            this.check(x, y + sz);
     }
 
     // return an ascii representation of the minefield
     ascii() {
         let str = '';
         for (let i = 0; i < this.field.length; i++) {
-            if (this.field[i].checked) 
+            if (this.field[i].checked && !this.field[i].bomb) 
                 str += this.field[i].adjacent;
             else
                 str += this.field[i].bomb ? '*' : '.';
@@ -104,6 +135,10 @@ class Minefield {
         }
 
         return str;
+    }
+
+    [Symbol.iterator]() {
+        return this.field[Symbol.iterator];
     }
 }
 
