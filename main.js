@@ -5,7 +5,8 @@ let canvas = document.querySelector('#minefield');
 let context = canvas.getContext('2d');
 let size = canvas.clientWidth / 8;
 let bombs = 10;
-let field = new Minefield(8, 8, bombs, size);
+let width = 8, height = 8;
+let field = new Minefield(width, height, bombs, size);
 
 // images
 let numberImgs = Array.from(document.querySelectorAll('.number'));
@@ -20,21 +21,31 @@ for (let cell of field)
     context.drawImage(uncheckedImg, cell.x, cell.y, size, size);
 
 // start
-canvas.addEventListener('click', check);
-function check(e) {
+let firstClick = true;
+canvas.addEventListener('click', click);
+function click(e) {
     let clickedCell = field.check(e.offsetX, e.offsetY);
-    draw(clickedCell);
+
+    if (firstClick) { // ensure first cell is clear
+        while (clickedCell.adjacent != 0) {
+            field = new Minefield(width, height, bombs, size);
+            clickedCell = field.check(e.offsetX, e.offsetY);
+        }
+        firstClick = false;
+    }
+
+    update(clickedCell);
 }
 
 
-function draw(clickedCell) {
+function update(clickedCell) {
     if (clickedCell.bomb) { // gameover
         for (let cell of field)
             if (cell.bomb)
                 context.drawImage(mineImg, cell.x, cell.y, size, size);
         context.drawImage(hitMineImg, clickedCell.x, clickedCell.y, size, size);
 
-        canvas.removeEventListener('click', check);
+        canvas.removeEventListener('click', click);
     }
 
     let uncheckedCount = 0;
@@ -49,5 +60,7 @@ function draw(clickedCell) {
         for (let cell of field)
             if (!cell.checked)
                 context.drawImage(flagImg, cell.x, cell.y, size, size);
+
+        canvas.removeEventListener('click', click);
     }
 }
