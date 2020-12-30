@@ -5,7 +5,14 @@
         <link rel="stylesheet" href="main.css">
     </head>
     <body>
-        <canvas id="minefield" width="800px" height="800px"></canvas>
+        <button data-bombs="10" data-width="8" data-height="8" 
+                data-cwidth="600" data-cheight="600" type="button">8x8</button>
+        <button data-bombs="40" data-width="16" data-height="16" 
+                data-cwidth="736" data-cheight="736"type="button">16x16</button>
+        <button data-bombs="99" data-width="30" data-height="30" 
+                data-cwidth="1200" data-cheight="640"type="button">30x16</button>
+        <br><br>
+        <canvas id="minefield" width="600px" height="600px"></canvas>
         <img class="number" id="0" src="images/0.png">
         <img class="number" id="1" src="images/1.png">
         <img class="number" id="2" src="images/2.png">
