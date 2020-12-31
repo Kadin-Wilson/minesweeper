@@ -1,8 +1,66 @@
-body {
+body, html {
+    margin: 0;
+    padding: 0;
 }
+* {
+    box-sizing: border-box;
+}
+
+
+.container {
+    /* element styles */
+    width: 100vw;
+    height: 100vh;
+    background-color: #E5E5E5;
+
+    /* flexbox styles */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.buttons {
+    /* element styles */
+    height: 60vh;
+
+    /* flexbox styles */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    /* flex item styles */
+    flex: 0 1 400px;
+}
+
+button {
+    /* element styles */
+    display: block;
+    width: 100%;
+    border: 5px outset #42505F;
+    background-color: #42505F;
+    cursor: pointer;
+    font-size: 250%;
+    color: #90E465;
+
+    /* no default styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* flex item styles */
+    flex: 0 1 100px;
+}
+button:hover {
+    background-color:#34404C; 
+}
+button:active {
+    border: 5px inset #42505F;
+    font-size: 240%;
+}
+
+
+/* hide image assets */
 img {
     display: none;
 }
-#minefield {
-    background-color: grey;
-}
+
+
